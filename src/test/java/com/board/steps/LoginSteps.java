@@ -13,6 +13,8 @@ import static com.codeborne.selenide.Condition.visible;
 public class LoginSteps {
 
     private LoginPage loginPage;
+    private LoginPage logOutPage;
+
     private String registeredEmail;
     private String registeredPassword = "Test123!";
 
@@ -40,11 +42,6 @@ public class LoginSteps {
 
     @Then("the user is successfully logged in")
     public void userIsSuccessfullyLoggedIn() {
-        // Add proper verification here
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        logOutPage.shouldBe(visible);
     }
 }

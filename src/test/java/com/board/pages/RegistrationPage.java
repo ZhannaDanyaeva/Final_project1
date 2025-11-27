@@ -2,23 +2,20 @@ package com.board.pages;
 
 import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class RegistrationPage extends BasePage {
 
     // Упрощенные и более надежные локаторы
-    private SelenideElement emailInput = $("input[type='text'], [placeholder*='Введите Email'], [name*='email']");
-    private SelenideElement usernameInput = $("input[name='username'], [placeholder*='имя'], [placeholder*='Имя']");
-    private SelenideElement passwordInput = $("input[type='password'], [placeholder*='Пароль'], [name*='password']");
-    private SelenideElement confirmPasswordInput = $("input[type='password'], [placeholder*='Повторите пароль'], [name*='submitPassword']");
-    private SelenideElement registerButton = $("button[type='submit'], [text='Создать аккаунт']");
-    private SelenideElement errorMessage = $("span[text='Создать аккаунт']");
+    private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Введите Email') or @name='email']");
+//    private SelenideElement usernameInput = $("input[name='username'], [placeholder*='имя'], [placeholder*='Имя']");
+    private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @name='password']");
+    private SelenideElement confirmPasswordInput = $x("//input[contains(@placeholder, 'Повторите пароль') or @name='submitPassword']");
+    private SelenideElement registerButton = $x("//button[contains(text(), 'Создать аккаунт')]");
+    private SelenideElement errorMessage = $x("span[contains(text(), 'Ошибка']");
 
     public void enterEmail(String email) {
         emailInput.setValue(email);
-    }
-
-    public void enterUsername(String username) {
-        usernameInput.setValue(username);
     }
 
     public void enterPassword(String password) {
@@ -35,7 +32,6 @@ public class RegistrationPage extends BasePage {
 
     public void register(String email, String username, String password) {
         enterEmail(email);
-        enterUsername(username);
         enterPassword(password);
         enterConfirmPassword(password);
         clickRegisterButton();

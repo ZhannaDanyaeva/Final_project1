@@ -1,24 +1,29 @@
 package com.board.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class LoginPage extends BasePage {
 
     // ---- КОРРЕКТНЫЕ И НАДЁЖНЫЕ ЛОКАТОРЫ ----
 
     private SelenideElement emailInput =
-            $("input[placeholder*='Email'], input[type='email']");
+            $x("//input[contains(@placeholder, 'Введите Email') or @name='email']");
 
     private SelenideElement passwordInput =
-            $("input[type='password'], input[placeholder*='Пароль']");
+            $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
 
     private SelenideElement loginButton =
-            $("button[type='submit'], button:contains('Войти')");
+            $x("//button[contains(@class,'buttonPrimary') and normalize-space()='Войти']");
 
     private SelenideElement registerLink =
-            $("button:contains('Нет аккаунта'), a:contains('Нет аккаунта')");
+            $x("//button[contains(text(), 'Нет аккаунта')]");
+
+    private SelenideElement logOutButton =
+            $x("//button[contains(text(), 'Выйти')]");
 
 
     // ---- ДЕЙСТВИЯ ----
@@ -44,4 +49,17 @@ public class LoginPage extends BasePage {
         enterPassword(password);
         clickLoginButton();
     }
+
+
+    public void shouldBe(Condition visible) {
+        logOutButton.shouldBe(visible);
+    }
+
+    public void closeModalIfVisible() {
+        SelenideElement modal = $(".homePage_modal__zSdUB");
+        if (modal.is(Condition.visible)) {
+            modal.click();
+        }
+    }
+
 }
