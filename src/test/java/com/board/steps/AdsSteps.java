@@ -9,19 +9,20 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AdsSteps {
 
-    private AdsPage adsPage = new AdsPage();
-    private String createdAdId;
-    private Map<String, Object> adData;
+    private final AdsPage adsPage = new AdsPage();
+    private final SharedTestContext context;
+
+    public AdsSteps(SharedTestContext context) {
+        this.context = context;
+    }
 
     @Given("the user is logged in to the system")
     public void userIsLoggedIn() {
+
         Selenide.open("https://qa-desk.stand.praktikum-services.ru");
 
         if (adsPage.getUserProfileButton().exists() &&
@@ -39,92 +40,80 @@ public class AdsSteps {
 
     @When("the user creates a new advertisement")
     public void userCreatesNewAd() {
-        adData = new HashMap<>();
-        String title = DataGenerator.generateRandomTitle();
-        adData.put("title", title);
-        adData.put("description", DataGenerator.generateRandomDescription());
-        adData.put("price", DataGenerator.generateRandomPrice());
-        adData.put("category", "Книги");
 
+        context.adData.clear();
+        context.adData.put("title", DataGenerator.generateRandomTitle());
+        context.adData.put("description", DataGenerator.generateRandomDescription());
+        context.adData.put("price", DataGenerator.generateRandomPrice());
+        context.adData.put("category", "Книги");
 
         adsPage.createAd(
-                title,
-                (String) adData.get("description"),
-                (String) adData.get("category"),
-                (int) adData.get("price")
+                (String) context.adData.get("title"),
+                (String) context.adData.get("description"),
+                (String) context.adData.get("category"),
+                (int) context.adData.get("price")
         );
 
-        Selenide.sleep(5000);
+        adsPage.getSuccessBanner().shouldBe(Condition.visible);
 
-        createdAdId = ApiClient.getAdIdByTitle(title);
-
-        if (createdAdId == null) {
-            createdAdId = "ui-created-" + System.currentTimeMillis();
-        } else {
-        }
+        context.createdAdId = ApiClient.getAdIdByTitle((String) context.adData.get("title"));
+        assertNotNull(context.createdAdId, "Created ad ID was not found via API");
     }
 
     @When("the user edits their advertisement")
     public void userEditsHisAd() {
-        assertNotNull(adData, "No ad data available");
-        assertNotNull(adData.get("title"), "No ad title available");
 
-        Map<String, Object> updatedData = new HashMap<>();
-        String newTitle = "Updated " + adData.get("title");
-        updatedData.put("title", newTitle);
-        updatedData.put("description", "Updated " + adData.get("description"));
-        updatedData.put("price", ((int) adData.get("price")) + 100);
+        assertNotNull(context.adData.get("title"), "No ad created before editing");
 
-        adsPage.clickUserProfileButton();
-        adsPage.clickEditAdByTitle((String) adData.get("title"));
+        context.updatedData.clear();
+        context.updatedData.put("title", "Updated " + context.adData.get("title"));
+        context.updatedData.put("description", "Updated " + context.adData.get("description"));
+        context.updatedData.put("price", ((int) context.adData.get("price")) + 100);
 
-        adsPage.enterTitle(newTitle);
-        adsPage.enterDescription((String) updatedData.get("description"));
-        adsPage.enterPrice((int) updatedData.get("price"));
+        adsPage.openUserProfile();
+        adsPage.clickEditAdByTitle((String) context.adData.get("title"));
+
+        adsPage.enterTitle((String) context.updatedData.get("title"));
+        adsPage.enterDescription((String) context.updatedData.get("description"));
+        adsPage.enterPrice((int) context.updatedData.get("price"));
         adsPage.clickSaveButton();
 
-        adData.putAll(updatedData);
-        Selenide.sleep(3000);
+        adsPage.getSuccessBanner().shouldBe(Condition.visible);
+
+        context.adData.putAll(context.updatedData);
     }
+
 
     @When("the user deletes their advertisement")
     public void userDeletesHisAd() {
-        if (createdAdId == null || createdAdId.startsWith("ui-created-")) {
-            return;
-        }
-//        int status = ApiClient.deleteAd(createdAdId);
+        assertNotNull(context.createdAdId, "Ad ID is missing");
+
+        int status = ApiClient.deleteAd(context.createdAdId);
+        assertEquals(200, status, "Delete request failed");
     }
+
 
     @Then("the advertisement is successfully created")
     public void adIsSuccessfullyCreated() {
-        if (createdAdId == null || createdAdId.startsWith("ui-created-")) {
-            assertTrue(Selenide.webdriver().driver().url().contains("qa-desk"),
-                    "Should be on the main page after ad creation");
-            return;
-        }
 
-        int status = ApiClient.getAdStatus(createdAdId);
-        if (status != 200) {
-        }
+        int status = ApiClient.getAdStatus(context.createdAdId);
+        assertEquals(200, status, "Ad was not created or not found via API");
     }
 
     @Then("the advertisement is successfully edited")
     public void adIsSuccessfullyEdited() {
-        assertTrue(Selenide.webdriver().driver().url().contains("qa-desk"),
-                "Should be on the main page after ad editing");
-        Selenide.sleep(2000);
+
+        var response = ApiClient.getAd(context.createdAdId);
+
+        assertEquals(context.updatedData.get("title"), response.getTitle());
+        assertEquals(context.updatedData.get("description"), response.getDescription());
+        assertEquals(context.updatedData.get("price"), response.getPrice());
     }
-
-
 
     @Then("the advertisement is successfully deleted")
     public void adIsSuccessfullyDeleted() {
-        if (createdAdId == null || createdAdId.startsWith("ui-created-")) {
-            return;
-        }
 
-        int status = ApiClient.getAdStatus(createdAdId);
-        if (status != 404) {
-        }
+        int status = ApiClient.getAdStatus(context.createdAdId);
+        assertEquals(404, status, "Ad still exists after deletion");
     }
 }

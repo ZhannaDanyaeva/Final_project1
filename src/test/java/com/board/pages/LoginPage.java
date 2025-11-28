@@ -8,8 +8,6 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class LoginPage extends BasePage {
 
-    // ---- КОРРЕКТНЫЕ И НАДЁЖНЫЕ ЛОКАТОРЫ ----
-
     private SelenideElement emailInput =
             $x("//input[contains(@placeholder, 'Введите Email') or @name='email']");
 
@@ -24,9 +22,6 @@ public class LoginPage extends BasePage {
 
     private SelenideElement logOutButton =
             $x("//button[contains(text(), 'Выйти')]");
-
-
-    // ---- ДЕЙСТВИЯ ----
 
     public void enterEmail(String email) {
         emailInput.setValue(email);
@@ -61,5 +56,4 @@ public class LoginPage extends BasePage {
             modal.click();
         }
     }
-
 }

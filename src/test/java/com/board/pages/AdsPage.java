@@ -14,19 +14,16 @@ import static io.restassured.RestAssured.given;
 
 public class AdsPage extends BasePage {
 
-    // ---------- АВТОРИЗАЦИЯ ----------
     private SelenideElement signInButton = $x("//button[contains(text(), 'Вход')]");
     private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Email') or @type='email']");
     private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
     private SelenideElement loginButton = $x("//button[@type='submit' and contains(@class,'buttonPrimary') and normalize-space()='Войти']");
 
-    // Элемент, который появляется после успешного логина
     public SelenideElement userProfileIcon = $x("//*[contains(@class,'circleSmall')]//*[contains(@class,'svgSmall')]");
 
     private SelenideElement logOutButton =
             $x("//button[contains(@class, 'Выйти') or @type='submit']");
 
-    // ---------- ОБЪЯВЛЕНИЯ ----------
     private SelenideElement createAdButton = $x("//button[contains(text(), 'Разместить объявление')]");
     private SelenideElement titleInput = $x("//input[contains(@placeholder, 'Название') or @type='text']");
     private SelenideElement descriptionInput = $x("//textarea[contains(@placeholder, 'Описание товара') or @name='description']");
@@ -39,7 +36,6 @@ public class AdsPage extends BasePage {
     private SelenideElement buttonPrimary = $x("//button[@type='submit' and text()='Опубликовать']");
 
 
-    // ---------- ЛОГИН ----------
     public void clickSignIn() {
         signInButton.click();
     }
@@ -56,12 +52,10 @@ public class AdsPage extends BasePage {
         loginButton.click();
     }
 
-    // ---------- ПРОВЕРКА ЛОГИНА ----------
     public boolean isUserLoggedIn() {
         return userProfileIcon.shouldBe(visible).isDisplayed();
     }
 
-    // ---------- СОЗДАНИЕ ОБЪЯВЛЕНИЯ ----------
     public void clickCreateAdButton() {
         createAdButton.click();
     }
@@ -82,16 +76,12 @@ public class AdsPage extends BasePage {
         priceInput.setValue(String.valueOf(price));
     }
 
-    // Метод для выбора категории по тексту
     public void selectCategory(String categoryName) {
-        // Клик по кнопке, чтобы открыть дропдаун
         categoryDropdownButton.shouldBe(Condition.visible).click();
 
-        // Найти категорию в выпадающем списке, подождать её видимости
         SelenideElement categoryOption = $x(
                 "//div[contains(@class,'dropDownMenu')]//button//span[text()='" + categoryName + "']"
         ).shouldBe(Condition.visible, Duration.ofSeconds(5));
-        // Кликнуть по категории
         categoryOption.click();
     }
 
@@ -159,4 +149,11 @@ public class AdsPage extends BasePage {
     }
 
 
+    public LoginPage getSuccessBanner() {
+        return new LoginPage();
+    }
+
+    public void openUserProfile() {
+        userProfileIcon.shouldBe(visible).click();
+    }
 }

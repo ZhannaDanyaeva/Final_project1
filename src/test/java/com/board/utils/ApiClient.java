@@ -1,14 +1,12 @@
 package com.board.utils;
 
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import com.board.utils.models.AdResponse;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static io.restassured.RestAssured.given;
 
 public class ApiClient {
+
+    private static final String BASE_URL = "https://qa-desk.stand.praktikum-services.ru";
 
     public static String getAdIdByTitle(String title) {
         System.out.println("Simulating API call to find ad by title: " + title);
@@ -32,5 +30,17 @@ public class ApiClient {
     public static int getDeleteStatus(String adId) {
         System.out.println("Simulating API call to check deletion status for: " + adId);
         return 404;
+    }
+
+    public static AdResponse getAd(String createdAdId) {
+        String adId = null;
+        return given()
+                .baseUri(BASE_URL)
+                .when()
+                .get("/api/ads/" + adId)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(AdResponse.class);
     }
 }
