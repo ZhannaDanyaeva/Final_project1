@@ -22,16 +22,11 @@ public class LoginSteps {
     public void registeredUserExists() {
         registeredEmail = DataGenerator.generateRandomEmail();
         String username = "user_" + DataGenerator.generateRandomString(6);
-
-        // For now, just store the data - API call might need adjustment
-        // ApiClient.registerUser(registeredEmail, registeredPassword, username);
     }
 
     @Given("the user is on the login page")
     public void userIsOnLoginPage() {
         Selenide.open("https://qa-desk.stand.praktikum-services.ru/login");
-
-
         loginPage = new LoginPage();
     }
 
@@ -42,6 +37,7 @@ public class LoginSteps {
 
     @Then("the user is successfully logged in")
     public void userIsSuccessfullyLoggedIn() {
-        logOutPage.shouldBe(visible);
+        LoginPage logOutButton = null;
+        logOutButton.shouldBe(visible);
     }
 }

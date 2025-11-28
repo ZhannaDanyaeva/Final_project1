@@ -8,7 +8,6 @@ public class RegistrationPage extends BasePage {
 
     // Упрощенные и более надежные локаторы
     private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Введите Email') or @name='email']");
-//    private SelenideElement usernameInput = $("input[name='username'], [placeholder*='имя'], [placeholder*='Имя']");
     private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @name='password']");
     private SelenideElement confirmPasswordInput = $x("//input[contains(@placeholder, 'Повторите пароль') or @name='submitPassword']");
     private SelenideElement registerButton = $x("//button[contains(text(), 'Создать аккаунт')]");

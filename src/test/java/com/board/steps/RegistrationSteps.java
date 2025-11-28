@@ -38,13 +38,13 @@ public class RegistrationSteps {
 
     @Then("the registration is successful")
     public void registrationIsSuccessful() {
-        // Check if redirected to main page or success message appears
         assertTrue(Selenide.webdriver().driver().url().contains("/ads") ||
                 Selenide.webdriver().driver().url().contains("/login"));
     }
 
     @Then("an error message about registration is displayed")
     public void errorMessageIsDisplayed() {
+
         registrationPage.getErrorMessage().shouldBe(visible);
     }
 }

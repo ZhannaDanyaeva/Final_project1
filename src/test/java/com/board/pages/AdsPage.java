@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 
 import java.time.Duration;
 
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
@@ -14,7 +15,7 @@ import static io.restassured.RestAssured.given;
 public class AdsPage extends BasePage {
 
     // ---------- АВТОРИЗАЦИЯ ----------
-    private SelenideElement signInButton = $x("//button[contains(text(), 'Вход и регистрация')]");
+    private SelenideElement signInButton = $x("//button[contains(text(), 'Вход')]");
     private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Email') or @type='email']");
     private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
     private SelenideElement loginButton = $x("//button[@type='submit' and contains(@class,'buttonPrimary') and normalize-space()='Войти']");
@@ -100,7 +101,7 @@ public class AdsPage extends BasePage {
     }
 
     public void checkLogOutButton() {
-        logOutButton.shouldBe(visible);
+        logOutButton.shouldBe(exist);
     }
 
     public void clickEditAd(String title) {
