@@ -27,6 +27,8 @@ public class AdsSteps {
 
         if (adsPage.getUserProfileButton().exists() &&
                 adsPage.getUserProfileButton().isDisplayed()) {
+            var auth = ApiClient.login("jdanyaeva@yandex.ru", "123456");
+            context.token = auth.accessToken;
             return;
         }
 
@@ -36,6 +38,8 @@ public class AdsSteps {
         adsPage.clickLoginButton();
 
         adsPage.getUserProfileButton().shouldBe(Condition.visible);
+        var auth = ApiClient.login("jdanyaeva@yandex.ru", "123456");
+        context.token = auth.accessToken;
     }
 
     @When("the user creates a new advertisement")
@@ -88,14 +92,16 @@ public class AdsSteps {
     public void userDeletesHisAd() {
         assertNotNull(context.createdAdId, "Ad ID is missing");
 
-        int status = ApiClient.deleteAd(context.createdAdId);
+        int status = ApiClient.deleteAd(context.createdAdId, context.token);
         assertEquals(200, status, "Delete request failed");
     }
 
 
     @Then("the advertisement is successfully created")
     public void adIsSuccessfullyCreated() {
-
+        adsPage.openUserProfile();
+        adsPage.openMyAds();
+        adsPage.shouldSeeAdWithTitle(context.adData.get("title"));
         int status = ApiClient.getAdStatus(context.createdAdId);
         assertEquals(200, status, "Ad was not created or not found via API");
     }

@@ -6,9 +6,9 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class RegistrationPage extends BasePage {
 
-    // Упрощенные и более надежные локаторы
-    private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Введите Email') or @name='email']");
-    private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @name='password']");
+    private SelenideElement noAcc = $x("//button[text()='Нет аккаунта']");
+    private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Email') or @type='email']");
+    private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
     private SelenideElement confirmPasswordInput = $x("//input[contains(@placeholder, 'Повторите пароль') or @name='submitPassword']");
     private SelenideElement registerButton = $x("//button[contains(text(), 'Создать аккаунт')]");
     private SelenideElement errorMessage = $x("span[contains(text(), 'Ошибка']");
@@ -28,8 +28,13 @@ public class RegistrationPage extends BasePage {
     public void clickRegisterButton() {
         registerButton.click();
     }
+    public void clickNoAccButton() {
+        noAcc.click();
+    }
+
 
     public void register(String email, String username, String password) {
+        clickNoAccButton();
         enterEmail(email);
         enterPassword(password);
         enterConfirmPassword(password);
@@ -39,4 +44,6 @@ public class RegistrationPage extends BasePage {
     public SelenideElement getErrorMessage() {
         return errorMessage;
     }
+
+
 }

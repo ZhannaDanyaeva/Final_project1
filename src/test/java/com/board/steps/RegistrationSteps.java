@@ -19,7 +19,7 @@ public class RegistrationSteps {
 
     @Given("the user is on the registration page")
     public void userIsOnRegistrationPage() {
-        Selenide.open("https://qa-desk.stand.praktikum-services.ru/register");
+        Selenide.open("https://qa-desk.stand.praktikum-services.ru/regiatration");
         registrationPage = new RegistrationPage();
     }
 
@@ -44,7 +44,6 @@ public class RegistrationSteps {
 
     @Then("an error message about registration is displayed")
     public void errorMessageIsDisplayed() {
-
         registrationPage.getErrorMessage().shouldBe(visible);
     }
 }

@@ -7,5 +7,7 @@ public class SharedTestContext {
     public Map<String, Object> adData = new HashMap<>();
     public Map<String, Object> updatedData = new HashMap<>();
     public String createdAdId;
+    public String token;
+
 }
 

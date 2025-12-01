@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$x;
 public class LoginPage extends BasePage {
 
     private SelenideElement emailInput =
-            $x("//input[contains(@placeholder, 'Введите Email') or @name='email']");
+            $x("//input[contains(@placeholder, 'Email') or @type='email']");
 
     private SelenideElement passwordInput =
             $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
@@ -55,5 +55,9 @@ public class LoginPage extends BasePage {
         if (modal.is(Condition.visible)) {
             modal.click();
         }
+    }
+
+    public SelenideElement getLogOutButton() {
+        return logOutButton;
     }
 }

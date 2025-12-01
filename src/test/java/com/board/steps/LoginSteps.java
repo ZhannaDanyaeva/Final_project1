@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Condition.visible;
 public class LoginSteps {
 
     private LoginPage loginPage;
-    private LoginPage logOutPage;
+//    private LoginPage logOutPage;
 
     private String registeredEmail;
     private String registeredPassword = "Test123!";
@@ -32,12 +32,12 @@ public class LoginSteps {
 
     @When("the user enters valid credentials")
     public void userEntersValidCredentials() {
+
         loginPage.login(registeredEmail, registeredPassword);
     }
 
     @Then("the user is successfully logged in")
     public void userIsSuccessfullyLoggedIn() {
-        LoginPage logOutButton = null;
-        logOutButton.shouldBe(visible);
+        loginPage.getLogOutButton().shouldBe(visible);
     }
 }

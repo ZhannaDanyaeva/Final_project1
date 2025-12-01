@@ -34,6 +34,7 @@ public class AdsPage extends BasePage {
     // Поле с выбранной категорией (readonly input)
     private SelenideElement testAd = $x("button[contains(text(), 'Zhanna Test QA YP')]");
     private SelenideElement buttonPrimary = $x("//button[@type='submit' and text()='Опубликовать']");
+    private SelenideElement myAdsButton = $x("//a[contains(@href,'/profile') or text()='Мои объявления']");
 
 
     public void clickSignIn() {
@@ -155,5 +156,13 @@ public class AdsPage extends BasePage {
 
     public void openUserProfile() {
         userProfileIcon.shouldBe(visible).click();
+    }
+
+
+    public void openMyAds() {
+        myAdsButton.shouldBe(Condition.visible).click();
+    }
+
+    public void shouldSeeAdWithTitle(Object title) {
     }
 }
