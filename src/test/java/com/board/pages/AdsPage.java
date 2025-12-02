@@ -28,10 +28,7 @@ public class AdsPage extends BasePage {
     private SelenideElement titleInput = $x("//input[contains(@placeholder, 'Название') or @type='text']");
     private SelenideElement descriptionInput = $x("//textarea[contains(@placeholder, 'Описание товара') or @name='description']");
     private SelenideElement priceInput = $x("//input[contains(@placeholder, 'Стоимость') or @name='price']");
-    // Кнопка для открытия дропдауна
     private SelenideElement categoryDropdownButton = $x("//button[contains(@class,'dropDownMenu_arrowDown')]");
-
-    // Поле с выбранной категорией (readonly input)
     private SelenideElement testAd = $x("button[contains(text(), 'Zhanna Test QA YP')]");
     private SelenideElement buttonPrimary = $x("//button[@type='submit' and text()='Опубликовать']");
     private SelenideElement myAdsButton = $x("//a[contains(@href,'/profile') or text()='Мои объявления']");
@@ -41,12 +38,12 @@ public class AdsPage extends BasePage {
         signInButton.click();
     }
 
-    public void enterEmail(String mail) {
-        emailInput.setValue("jdanyaeva@yandex.ru");
+    public void enterEmail(String email) {
+        emailInput.setValue(email);
     }
 
-    public void enterPassword(String number) {
-        passwordInput.setValue("123456");
+    public void enterPassword(String password) {
+        passwordInput.setValue(password);
     }
 
     public void clickLoginButton() {
@@ -136,7 +133,6 @@ public class AdsPage extends BasePage {
     public void clickUserProfileButton(){
         userProfileIcon.click();
     }
-    //редактирование объявления
 
     public void getAd () {
         testAd.shouldBe(visible);

@@ -11,7 +11,7 @@ public class RegistrationPage extends BasePage {
     private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
     private SelenideElement confirmPasswordInput = $x("//input[contains(@placeholder, 'Повторите пароль') or @name='submitPassword']");
     private SelenideElement registerButton = $x("//button[contains(text(), 'Создать аккаунт')]");
-    private SelenideElement errorMessage = $x("span[contains(text(), 'Ошибка']");
+    private SelenideElement errorMessage = $x("span[contains(text(), 'Ошибка')]");
 
     public void enterEmail(String email) {
         emailInput.setValue(email);
@@ -33,7 +33,7 @@ public class RegistrationPage extends BasePage {
     }
 
 
-    public void register(String email, String username, String password) {
+    public void register(String email, String password) {
         clickNoAccButton();
         enterEmail(email);
         enterPassword(password);

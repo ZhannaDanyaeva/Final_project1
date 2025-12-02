@@ -19,7 +19,7 @@ public class DataGenerator {
         return sb.toString();
     }
 
-    public static String generateRandomTitle() {
+    public static String generateRandomName() {
         return "Advertisement " + System.currentTimeMillis();
     }
 

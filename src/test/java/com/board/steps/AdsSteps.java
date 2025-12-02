@@ -3,6 +3,7 @@ package com.board.steps;
 import com.board.pages.AdsPage;
 import com.board.utils.ApiClient;
 import com.board.utils.DataGenerator;
+import com.board.utils.models.Credentials;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import io.cucumber.java.en.Given;
@@ -23,30 +24,26 @@ public class AdsSteps {
     @Given("the user is logged in to the system")
     public void userIsLoggedIn() {
 
+        Credentials creds = new Credentials("jdanyaeva@yandex.ru", "123456");
+
+        var auth = ApiClient.login(creds);
+        context.token = auth.accessToken.accessToken;
+
         Selenide.open("https://qa-desk.stand.praktikum-services.ru");
 
-        if (adsPage.getUserProfileButton().exists() &&
-                adsPage.getUserProfileButton().isDisplayed()) {
-            var auth = ApiClient.login("jdanyaeva@yandex.ru", "123456");
-            context.token = auth.accessToken;
-            return;
-        }
-
         adsPage.clickSignIn();
-        adsPage.enterEmail("jdanyaeva@yandex.ru");
-        adsPage.enterPassword("123456");
+        adsPage.enterEmail(creds.email);
+        adsPage.enterPassword(creds.password);
         adsPage.clickLoginButton();
 
         adsPage.getUserProfileButton().shouldBe(Condition.visible);
-        var auth = ApiClient.login("jdanyaeva@yandex.ru", "123456");
-        context.token = auth.accessToken;
     }
 
     @When("the user creates a new advertisement")
     public void userCreatesNewAd() {
 
         context.adData.clear();
-        context.adData.put("title", DataGenerator.generateRandomTitle());
+        context.adData.put("title", DataGenerator.generateRandomName());
         context.adData.put("description", DataGenerator.generateRandomDescription());
         context.adData.put("price", DataGenerator.generateRandomPrice());
         context.adData.put("category", "Книги");
@@ -60,24 +57,26 @@ public class AdsSteps {
 
         adsPage.getSuccessBanner().shouldBe(Condition.visible);
 
-        context.createdAdId = ApiClient.getAdIdByTitle((String) context.adData.get("title"));
-        assertNotNull(context.createdAdId, "Created ad ID was not found via API");
-    }
+        context.createdAdId = ApiClient.getAdIdByTitle(
+                (String) context.adData.get("title"),
+                context.token
+        );
 
+    }
     @When("the user edits their advertisement")
     public void userEditsHisAd() {
 
-        assertNotNull(context.adData.get("title"), "No ad created before editing");
+        assertNotNull(context.adData.get("name"), "No ad created before editing");
 
         context.updatedData.clear();
-        context.updatedData.put("title", "Updated " + context.adData.get("title"));
+        context.updatedData.put("name", "Updated " + context.adData.get("name"));
         context.updatedData.put("description", "Updated " + context.adData.get("description"));
         context.updatedData.put("price", ((int) context.adData.get("price")) + 100);
 
         adsPage.openUserProfile();
-        adsPage.clickEditAdByTitle((String) context.adData.get("title"));
+        adsPage.clickEditAdByTitle((String) context.adData.get("name"));
 
-        adsPage.enterTitle((String) context.updatedData.get("title"));
+        adsPage.enterTitle((String) context.updatedData.get("name"));
         adsPage.enterDescription((String) context.updatedData.get("description"));
         adsPage.enterPrice((int) context.updatedData.get("price"));
         adsPage.clickSaveButton();

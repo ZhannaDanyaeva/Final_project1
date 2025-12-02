@@ -3,6 +3,8 @@ package com.board.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -18,10 +20,10 @@ public class LoginPage extends BasePage {
             $x("//button[contains(@class,'buttonPrimary') and normalize-space()='Войти']");
 
     private SelenideElement registerLink =
-            $x("//button[contains(text(), 'Нет аккаунта')]");
+            $x("//button[text()='Нет аккаунта']");
 
     private SelenideElement logOutButton =
-            $x("//button[contains(text(), 'Выйти')]");
+            $x("//button[text()='Выйти']");
 
     public void enterEmail(String email) {
         emailInput.setValue(email);
@@ -35,9 +37,9 @@ public class LoginPage extends BasePage {
         loginButton.click();
     }
 
-    public void clickRegisterLink() {
-        registerLink.click();
-    }
+//    public void clickRegisterLink() {
+//        registerLink.click();
+//    }
 
     public void login(String email, String password) {
         enterEmail(email);
@@ -47,7 +49,9 @@ public class LoginPage extends BasePage {
 
 
     public void shouldBe(Condition visible) {
-        logOutButton.shouldBe(visible);
+        logOutButton.shouldBe(visible, Duration.ofSeconds(10));
+
+
     }
 
     public void closeModalIfVisible() {

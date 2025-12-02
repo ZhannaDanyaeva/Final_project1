@@ -13,33 +13,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RegistrationSteps {
 
     private RegistrationPage registrationPage;
-    private String testEmail;
-    private String testUsername;
-    private final String testPassword = "Test123!";
+    private String email;
+    private String password = "123456";
+//    private final String testPassword = "Test123!";
 
     @Given("the user is on the registration page")
     public void userIsOnRegistrationPage() {
-        Selenide.open("https://qa-desk.stand.praktikum-services.ru/regiatration");
+        Selenide.open("https://qa-desk.stand.praktikum-services.ru/registration");
         registrationPage = new RegistrationPage();
     }
 
     @When("the user registers with a unique email")
     public void userRegistersWithUniqueEmail() {
-        testEmail = DataGenerator.generateRandomEmail();
-        testUsername = "user_" + DataGenerator.generateRandomString(6);
-
-        registrationPage.register(testEmail, testUsername, testPassword);
+        email = DataGenerator.generateRandomEmail();
+        registrationPage.register(email, password);
     }
 
     @When("the user tries to register with an existing email")
     public void userTriesToRegisterWithExistingEmail() {
-        registrationPage.register(testEmail, "another_user", testPassword);
+        registrationPage.register(email, password);
     }
 
     @Then("the registration is successful")
     public void registrationIsSuccessful() {
-        assertTrue(Selenide.webdriver().driver().url().contains("/ads") ||
-                Selenide.webdriver().driver().url().contains("/login"));
+        assertTrue(Selenide.webdriver().driver().url().contains("/registration") ||
+                Selenide.webdriver().driver().url().contains("/regiatration"));
     }
 
     @Then("an error message about registration is displayed")

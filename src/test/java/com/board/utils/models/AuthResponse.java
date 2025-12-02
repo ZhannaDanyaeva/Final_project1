@@ -1,7 +1,15 @@
 package com.board.utils.models;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AuthResponse {
-    public String accessToken;
-    public String refreshToken;
+    public User user;
+    @JsonAlias({"token", "access_token"})
+    public AccessToken accessToken;
+    public AuthResponse(){
+
+    }
+
 }
 

@@ -32,7 +32,6 @@ public class LoginSteps {
 
     @When("the user enters valid credentials")
     public void userEntersValidCredentials() {
-
         loginPage.login(registeredEmail, registeredPassword);
     }
 

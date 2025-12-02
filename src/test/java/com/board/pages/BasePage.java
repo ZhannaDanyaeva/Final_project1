@@ -18,7 +18,6 @@ public class BasePage {
         return $x(xpath);
     }
 
-    // Добавим метод для поиска по частичному тексту
     protected SelenideElement findElementByPartialText(String partialText) {
         return $x(".//*[contains(text(), '" + partialText + "')]");
     }
