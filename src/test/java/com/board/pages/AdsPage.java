@@ -92,19 +92,17 @@ public class AdsPage extends BasePage {
         logOutButton.shouldBe(exist);
     }
 
-    public void clickEditAd(String title) {
-        $x("//button[@class='editButton']").click();
-    }
+        public void clickEditAd(String name) {
+            $x("//div[contains(@class,'ad-card')][.//h3[text()='" + name + "']]//button[text()='Редактировать объявление']")
+                    .click();
+        }
 
-    public void clickDeleteAd(String title) {
-        $(".delete-button, [onclick*='delete']").click();
-    }
+    public void clickDeleteAd(String name){
+        $x("//div[contains(@class,'ad-card')][.//h3[text()='" + name + "']]//button[text()='Удалить']")
+                .click();    }
 
-    public void confirmDelete() {
-        $(".confirm-delete, .btn-danger").click();
-    }
 
-    public void createAd(String title, String description, String category, int price) {
+    public void createAd(String name, String description, String category, int price) {
         if (signInButton.exists() && signInButton.isDisplayed()) {
             clickSignIn();
             enterEmail("jdanyaeva@yandex.ru");
@@ -115,7 +113,7 @@ public class AdsPage extends BasePage {
         checkUserProfileIcon();
         checkLogOutButton();
         clickCreateAdButton();
-        enterTitle(title);
+        enterTitle(name);
         enterDescription(description);
         selectCategory(category);
         enterPrice(price);
@@ -137,17 +135,12 @@ public class AdsPage extends BasePage {
     public void getAd () {
         testAd.shouldBe(visible);
     }
-    public void clickEditAdByTitle(String title) {
-        String locator = "//div[contains(@class,'card')][.//h3[text()='" + title + "']]//button[contains(@class,'editButton')]";
+    public void clickEditAdByTitle(String name) {
+        String locator = "//div[contains(@class,'card')][.//h3[text()='" + name + "']]//button[contains(@class,'editButton')]";
 
         $x(locator)
                 .shouldBe(Condition.visible)
                 .click();
-    }
-
-
-    public LoginPage getSuccessBanner() {
-        return new LoginPage();
     }
 
     public void openUserProfile() {
@@ -159,6 +152,10 @@ public class AdsPage extends BasePage {
         myAdsButton.shouldBe(Condition.visible).click();
     }
 
-    public void shouldSeeAdWithTitle(Object title) {
+    public void shouldSeeAdWithTitle(String name) {
+        String locator = "//div[contains(@class,'card')]//h3[text()='" + name + "']";
+
+        $x(locator)
+                .shouldBe(Condition.visible, Duration.ofSeconds(5));
     }
 }

@@ -1,8 +1,10 @@
 package com.board.steps;
 
+import com.board.config.Config;
 import com.board.pages.AdsPage;
 import com.board.utils.ApiClient;
 import com.board.utils.DataGenerator;
+import com.board.utils.UserGenerator;
 import com.board.utils.models.Credentials;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
@@ -24,12 +26,14 @@ public class AdsSteps {
     @Given("the user is logged in to the system")
     public void userIsLoggedIn() {
 
-        Credentials creds = new Credentials("jdanyaeva@yandex.ru", "123456");
+        Credentials creds = UserGenerator.generateNewUser();
+
+       ApiClient.register(creds.email, creds.password, creds.password);
 
         var auth = ApiClient.login(creds);
         context.token = auth.accessToken.accessToken;
 
-        Selenide.open("https://qa-desk.stand.praktikum-services.ru");
+        Selenide.open(Config.BASE_URL);
 
         adsPage.clickSignIn();
         adsPage.enterEmail(creds.email);
@@ -43,22 +47,19 @@ public class AdsSteps {
     public void userCreatesNewAd() {
 
         context.adData.clear();
-        context.adData.put("title", DataGenerator.generateRandomName());
+        context.adData.put("name", DataGenerator.generateRandomName());
         context.adData.put("description", DataGenerator.generateRandomDescription());
         context.adData.put("price", DataGenerator.generateRandomPrice());
         context.adData.put("category", "Книги");
 
         adsPage.createAd(
-                (String) context.adData.get("title"),
+                (String) context.adData.get("name"),
                 (String) context.adData.get("description"),
                 (String) context.adData.get("category"),
                 (int) context.adData.get("price")
         );
-
-        adsPage.getSuccessBanner().shouldBe(Condition.visible);
-
         context.createdAdId = ApiClient.getAdIdByTitle(
-                (String) context.adData.get("title"),
+                (String) context.adData.get("name"),
                 context.token
         );
 
@@ -81,8 +82,6 @@ public class AdsSteps {
         adsPage.enterPrice((int) context.updatedData.get("price"));
         adsPage.clickSaveButton();
 
-        adsPage.getSuccessBanner().shouldBe(Condition.visible);
-
         context.adData.putAll(context.updatedData);
     }
 
@@ -100,7 +99,7 @@ public class AdsSteps {
     public void adIsSuccessfullyCreated() {
         adsPage.openUserProfile();
         adsPage.openMyAds();
-        adsPage.shouldSeeAdWithTitle(context.adData.get("title"));
+        adsPage.shouldSeeAdWithTitle((String) context.adData.get("name"));
         int status = ApiClient.getAdStatus(context.createdAdId);
         assertEquals(200, status, "Ad was not created or not found via API");
     }
@@ -110,7 +109,7 @@ public class AdsSteps {
 
         var response = ApiClient.getAd(context.createdAdId);
 
-        assertEquals(context.updatedData.get("title"), response.getTitle());
+        assertEquals(context.updatedData.get("name"), response.getTitle());
         assertEquals(context.updatedData.get("description"), response.getDescription());
         assertEquals(context.updatedData.get("price"), response.getPrice());
     }

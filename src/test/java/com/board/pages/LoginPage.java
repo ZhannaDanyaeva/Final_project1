@@ -37,9 +37,6 @@ public class LoginPage extends BasePage {
         loginButton.click();
     }
 
-//    public void clickRegisterLink() {
-//        registerLink.click();
-//    }
 
     public void login(String email, String password) {
         enterEmail(email);

@@ -11,7 +11,7 @@ public class DeleteAdTest {
     @Test
     public void deleteAdTest() {
         String email = DataGenerator.generateRandomEmail();
-        String password = "Password123";
+        String password = "123456";
 
         AuthResponse auth = ApiClient.register(
                 email,

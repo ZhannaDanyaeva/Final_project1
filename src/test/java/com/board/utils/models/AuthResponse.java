@@ -11,5 +11,8 @@ public class AuthResponse {
 
     }
 
+    public int statusCode() {
+        return 0;
+    }
 }
 
