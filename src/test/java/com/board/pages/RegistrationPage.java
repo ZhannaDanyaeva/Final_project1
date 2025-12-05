@@ -6,7 +6,7 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class RegistrationPage extends BasePage {
 
-    private SelenideElement noAcc = $x("//button[text()='Нет аккаунта']");
+    private SelenideElement noAcc = $x("//button[text()='Уже есть аккаунт']");
     private SelenideElement emailInput = $x("//input[contains(@placeholder, 'Email') or @type='email']");
     private SelenideElement passwordInput = $x("//input[contains(@placeholder, 'Пароль') or @type='password']");
     private SelenideElement confirmPasswordInput = $x("//input[contains(@placeholder, 'Повторите пароль') or @name='submitPassword']");

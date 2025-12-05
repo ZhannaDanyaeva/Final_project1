@@ -6,7 +6,7 @@ import com.board.utils.models.AuthResponse;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DeleteAdTest {
+public class DeleteAdSteps {
 
     @Test
     public void deleteAdTest() {

@@ -32,6 +32,7 @@ public class RegistrationSteps {
 
     @When("the user tries to register with an existing email")
     public void userTriesToRegisterWithExistingEmail() {
+
         registrationPage.register(email, password);
     }
 
